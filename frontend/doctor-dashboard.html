@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Portal - MediConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="doctor-dashboard.html" class="brand-link">
+        <span>MediConnect</span>
+        <span class="brand-badge">Doctor Workspace</span>
+      </a>
+
+      <div class="nav-actions">
+        <div>
+          <strong id="doctor-name-display" style="color: var(--secondary);">Doctor</strong>
+          <span style="font-size: 0.8rem; color: var(--primary); display: block;" id="doctor-spec-display">Specialist</span>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="alert-container"></div>
+
+    <!-- Doctor Metrics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Today's Appointments</div>
+        <div class="value" id="stat-today">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Scheduled Total</div>
+        <div class="value" id="stat-scheduled">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Completed Consults</div>
+        <div class="value" id="stat-completed">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Unique Patients</div>
+        <div class="value" id="stat-patients">0</div>
+      </div>
+    </div>
+
+    <!-- Doctor Availability Management -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Manage My Availability Slots</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Define the consultation hours when patients can book appointments with you</p>
+        </div>
+      </div>
+
+      <div id="availability-slots-list" style="margin-bottom: 1.5rem;">
+        <!-- Injected via doctor.js -->
+      </div>
+
+      <form onsubmit="addAvailabilitySlot(event)" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="avail-date">Date</label>
+          <input type="date" id="avail-date" class="form-control" required />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="avail-start">Start Time</label>
+          <input type="time" id="avail-start" class="form-control" required value="09:00" />
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label class="form-label" for="avail-end">End Time</label>
+          <input type="time" id="avail-end" class="form-control" required value="09:30" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="height: 42px;">+ Add Slot</button>
+      </form>
+    </div>
+
+    <!-- Appointments Queue -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Assigned Patient Appointments</h2>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Patient</th>
+              <th>Chief Complaint / Reason</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="doctor-appointments-body">
+            <!-- Injected via doctor.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prescription Modal -->
+  <div class="modal-overlay" id="prescription-modal">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <div>
+          <h3>Digital Prescription & Consultation Notes</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Patient: <strong id="rx-patient-name">Patient</strong> · Reason: <span id="rx-appointment-reason">Complaint</span></p>
+        </div>
+        <button onclick="closeModal('prescription-modal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <form onsubmit="savePrescription(event)">
+        <div class="form-group">
+          <label class="form-label" for="rx-diagnosis">Clinical Diagnosis</label>
+          <input type="text" id="rx-diagnosis" class="form-control" placeholder="e.g. Acute Bronchitis, Migraine with aura" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rx-medicines">Prescribed Medicines</label>
+          <input type="text" id="rx-medicines" class="form-control" placeholder="e.g. Amoxicillin 500mg, Paracetamol 650mg" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rx-dosage">Dosage Schedule</label>
+          <input type="text" id="rx-dosage" class="form-control" placeholder="e.g. 1 capsule thrice daily after meals for 5 days" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rx-instructions">Diet & Lifestyle Instructions</label>
+          <textarea id="rx-instructions" class="form-control" rows="3" placeholder="Rest adequately, hydrate, follow up if fever persists" required></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('prescription-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Complete & Issue Prescription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Patient Medical History Modal -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <div>
+          <h3>Patient Medical History</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);" id="history-patient-name">Patient Name</p>
+        </div>
+        <button onclick="closeModal('history-modal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <div id="patient-history-list">
+        <!-- Injected via doctor.js -->
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: right;">
+        <button class="btn btn-secondary" onclick="closeModal('history-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/doctor.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

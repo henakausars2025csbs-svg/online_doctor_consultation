@@ -1,0 +1,6 @@
+{
+  "name": "MediConnect - Online Doctor Consultation Platform",
+  "description": "Comprehensive healthcare consultation platform connecting patients with specialized doctors. Features appointment booking, digital prescriptions, electronic medical records, and role-based portals for patients, doctors, and administrators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

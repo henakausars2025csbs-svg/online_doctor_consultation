@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Portal - MediConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="patient-dashboard.html" class="brand-link">
+        <span>MediConnect</span>
+        <span class="brand-badge">Patient Portal</span>
+      </a>
+
+      <div class="nav-actions">
+        <span style="font-size: 0.9rem; color: var(--text-muted);">Welcome, <strong id="welcome-name" style="color: var(--secondary);">Patient</strong></span>
+        <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="alert-container"></div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Upcoming Appointments</div>
+        <div class="value" id="stat-upcoming">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Completed Consults</div>
+        <div class="value" id="stat-completed">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Medical Records</div>
+        <div class="value" id="stat-records">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Prescriptions</div>
+        <div class="value" id="stat-prescriptions">0</div>
+      </div>
+    </div>
+
+    <!-- Book Doctor Section -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Consult Specialized Doctors</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Find certified physicians and book your online appointment</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <input type="text" id="doctor-search" class="form-control" placeholder="Search by name or specialty..." style="width: 240px;" oninput="filterDoctors()" />
+          <select id="specialization-filter" class="form-control" style="width: 170px;" onchange="filterDoctors()">
+            <option value="All">All Specialties</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Pediatrics">Pediatrics</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="doctors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.25rem;">
+        <!-- Injected via patient.js -->
+      </div>
+    </div>
+
+    <!-- Appointments History Table -->
+    <div class="card">
+      <div class="card-header">
+        <h2>My Consultation Appointments</h2>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Doctor</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="appointments-table-body">
+            <!-- Loaded via patient.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2 Column Section: Records & Prescriptions -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+      <!-- Medical Records -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Medical History & Records</h2>
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('record-modal').classList.add('active')">+ Add Record</button>
+        </div>
+        <div id="records-list">
+          <!-- Loaded via patient.js -->
+        </div>
+      </div>
+
+      <!-- Prescriptions -->
+      <div class="card">
+        <div class="card-header">
+          <h2>Digital Prescriptions</h2>
+        </div>
+        <div id="prescriptions-list">
+          <!-- Loaded via patient.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="modal-overlay" id="booking-modal">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <div>
+          <h3>Book Doctor Consultation</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);"><span id="modal-doctor-name">Doctor</span> · <span id="modal-doctor-spec">Spec</span> · <span id="modal-doctor-fee">$0</span></p>
+        </div>
+        <button onclick="closeModal('booking-modal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <form onsubmit="confirmBooking(event)">
+        <div class="form-group">
+          <label class="form-label" for="booking-date">Consultation Date</label>
+          <input type="date" id="booking-date" class="form-control" required onchange="loadDoctorSlots(selectedDoctor.doctor_id, this.value)" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Available Time Slots</label>
+          <div id="slots-container" style="min-height: 50px;">
+            <!-- Slots loaded here -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="booking-reason">Symptoms or Reason for Consultation</label>
+          <input type="text" id="booking-reason" class="form-control" placeholder="e.g. Mild chest tightness, routine follow up" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="booking-notes">Additional Patient Notes (Optional)</label>
+          <textarea id="booking-notes" class="form-control" rows="2" placeholder="Any previous medications or specific concerns"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('booking-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Medical Record Modal -->
+  <div class="modal-overlay" id="record-modal">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <h3>Add Medical Record</h3>
+        <button onclick="closeModal('record-modal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <form onsubmit="addMedicalRecord(event)">
+        <div class="form-group">
+          <label class="form-label" for="record-diagnosis">Condition / Diagnosis</label>
+          <input type="text" id="record-diagnosis" class="form-control" placeholder="e.g. Asthma, Hypertension, Migraine" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="record-symptoms">Symptoms Observed</label>
+          <textarea id="record-symptoms" class="form-control" rows="3" placeholder="Describe symptoms experienced" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="record-treatment">Current Treatment / Notes (Optional)</label>
+          <input type="text" id="record-treatment" class="form-control" placeholder="e.g. Inhaler, low sodium diet" />
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('record-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Record</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/patient.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

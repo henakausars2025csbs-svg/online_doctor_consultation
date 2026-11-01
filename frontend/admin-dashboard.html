@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Operations Console - MediConnect</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="admin-dashboard.html" class="brand-link">
+        <span>MediConnect</span>
+        <span class="brand-badge" style="background: #475569;">Admin Console</span>
+      </a>
+
+      <div class="nav-actions">
+        <span style="font-size: 0.9rem; color: var(--text-muted);">Super Administrator</span>
+        <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="alert-container"></div>
+
+    <!-- Administrative KPI Stats -->
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+      <div class="stat-card">
+        <div class="label">Total Patients</div>
+        <div class="value" id="stat-total-patients">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Doctors</div>
+        <div class="value" id="stat-total-doctors">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">All Appointments</div>
+        <div class="value" id="stat-total-appts">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Pending</div>
+        <div class="value" id="stat-pending-appts">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Completed</div>
+        <div class="value" id="stat-completed-appts">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Platform Revenue</div>
+        <div class="value" id="stat-revenue" style="color: var(--success);">$0</div>
+      </div>
+    </div>
+
+    <!-- Doctors Management Section -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Manage Doctors</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Approve, register, and supervise clinical staff</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('add-doctor-modal').classList.add('active')">+ Register New Doctor</button>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Doctor Name</th>
+              <th>Specialization</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-doctors-table">
+            <!-- Loaded via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Patients Management Section -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Registered Patients</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Supervise registered patient profiles and accounts</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>DOB</th>
+              <th>Total Bookings</th>
+              <th>Account Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-patients-table">
+            <!-- Loaded via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Appointments Management Section -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>All Appointments & Consultations</h2>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Live view of all bookings across the platform</p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Status Filter:</span>
+          <select id="filter-appt-status" class="form-control" style="width: 140px;" onchange="filterAppointments()">
+            <option value="All">All Statuses</option>
+            <option value="Scheduled">Scheduled</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Schedule</th>
+              <th>Patient</th>
+              <th>Doctor & Specialty</th>
+              <th>Reason</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-appointments-table">
+            <!-- Loaded via admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Analytics & Reports Section -->
+    <div style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 1.5rem;">
+      <div class="card">
+        <div class="card-header">
+          <h2>Specialization Spread</h2>
+        </div>
+        <div id="reports-spec-container">
+          <!-- Loaded via admin.js -->
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Doctor Performance</h2>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Doctor</th>
+                <th>Specialty</th>
+                <th>Total</th>
+                <th>Done</th>
+                <th>Cancelled</th>
+              </tr>
+            </thead>
+            <tbody id="reports-doctor-perf-table">
+              <!-- Loaded via admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Doctor Modal -->
+  <div class="modal-overlay" id="add-doctor-modal">
+    <div class="modal-dialog">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <h3>Register New Doctor</h3>
+        <button onclick="closeModal('add-doctor-modal')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+      </div>
+
+      <form onsubmit="addDoctor(event)">
+        <div class="form-group">
+          <label class="form-label" for="doc-name">Doctor Full Name (with Title)</label>
+          <input type="text" id="doc-name" class="form-control" placeholder="Dr. John Smith" required />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="doc-spec">Specialization</label>
+            <select id="doc-spec" class="form-control" required>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="Orthopedics">Orthopedics</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="doc-fee">Consultation Fee ($)</label>
+            <input type="number" id="doc-fee" class="form-control" value="80" min="10" step="5" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="doc-email">Email Address</label>
+            <input type="email" id="doc-email" class="form-control" placeholder="doctor@mediconnect.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="doc-phone">Phone Number</label>
+            <input type="tel" id="doc-phone" class="form-control" placeholder="+1 (555) 000-0000" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label" for="doc-password">Initial Password</label>
+            <input type="password" id="doc-password" class="form-control" placeholder="••••••••" minlength="6" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="doc-exp">Experience (Years)</label>
+            <input type="number" id="doc-exp" class="form-control" value="8" min="1" max="50" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="doc-bio">Professional Biography</label>
+          <textarea id="doc-bio" class="form-control" rows="2" placeholder="Brief background of clinical experience and qualifications"></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('add-doctor-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Register Doctor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

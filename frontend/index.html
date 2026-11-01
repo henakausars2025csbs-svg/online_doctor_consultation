@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediConnect - Online Doctor Consultation Platform</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="brand-link">
+        <span>MediConnect</span>
+        <span class="brand-badge">Healthcare</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="#specialists">Specialists</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-secondary">Sign In</a>
+        <a href="register.html" class="btn btn-primary">Book Consultation</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section style="background: linear-gradient(180deg, #f0f9ff 0%, #f8fafc 100%); padding: 4rem 2rem; border-bottom: 1px solid var(--border);">
+    <div class="container" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; padding: 0;">
+      <div>
+        <span style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em;">Certified Medical Telehealth</span>
+        <h1 style="font-size: 3rem; margin: 0.75rem 0 1.25rem 0; color: var(--secondary);">Specialized Doctor Consultations From The Comfort of Home</h1>
+        <p style="color: var(--text-muted); font-size: 1.15rem; margin-bottom: 2rem;">
+          Connect with board-certified physicians, cardiologists, neurologists, and pediatricians. Schedule appointments in minutes and receive instant digital prescriptions.
+        </p>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <a href="register.html" class="btn btn-primary" style="padding: 0.75rem 1.75rem; font-size: 1rem;">Register as Patient</a>
+          <a href="login.html" class="btn btn-secondary" style="padding: 0.75rem 1.75rem; font-size: 1rem;">Doctor / Admin Portal</a>
+        </div>
+      </div>
+      <div>
+        <img src="/src/assets/images/hero_telehealth_consultation_1793515595409.jpg" alt="Telemedicine Consultation" style="width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); object-fit: cover; max-height: 420px;" />
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="container" style="padding: 4rem 2rem;">
+    <div style="text-align: center; max-width: 650px; margin: 0 auto 3rem auto;">
+      <h2>How MediConnect Works</h2>
+      <p style="color: var(--text-muted); margin-top: 0.5rem;">Seamless patient healthcare delivery powered by structured appointment scheduling</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+      <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="width: 48px; height: 48px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-weight: 700; font-size: 1.25rem;">1</div>
+        <h3>Choose Your Specialist</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Browse vetted physicians across cardiology, neurology, pediatrics, and more.</p>
+      </div>
+
+      <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="width: 48px; height: 48px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-weight: 700; font-size: 1.25rem;">2</div>
+        <h3>Book Verified Time Slot</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Real-time slot availability ensures instant confirmation with zero double-booking.</p>
+      </div>
+
+      <div class="card" style="text-align: center; padding: 2rem;">
+        <div style="width: 48px; height: 48px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; font-weight: 700; font-size: 1.25rem;">3</div>
+        <h3>Consult & Digital Rx</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">Receive professional diagnosis, electronic medical records, and digital prescriptions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Specialists -->
+  <section id="specialists" style="background: #ffffff; padding: 4rem 2rem; border-top: 1px solid var(--border);">
+    <div class="container" style="padding: 0;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2.5rem;">
+        <div>
+          <h2>Our Medical Specialists</h2>
+          <p style="color: var(--text-muted); margin-top: 0.25rem;">Book certified physicians with verified credentials</p>
+        </div>
+        <a href="login.html" class="btn btn-primary">Book Consultation</a>
+      </div>
+
+      <div id="home-doctors-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem;">
+        <!-- Loaded via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: var(--secondary); color: #94a3b8; padding: 3rem 2rem; border-top: 1px solid #1e293b;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: gap: 1rem; padding: 0;">
+      <div>
+        <span style="color: #ffffff; font-weight: 700; font-size: 1.1rem;">MediConnect</span>
+        <p style="font-size: 0.85rem; margin-top: 0.25rem;">Complete Healthcare Consultation & Medical Records Platform</p>
+      </div>
+      <div style="font-size: 0.85rem;">
+        &copy; 2026 MediConnect. All clinical rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const doctors = await App.request('/api/doctors');
+        const container = document.getElementById('home-doctors-grid');
+        if (!container) return;
+        container.innerHTML = doctors.slice(0, 3).map(d => `
+          <div class="doctor-card">
+            <img src="${d.avatar_url || '/src/assets/images/doctor_dr_sarah_avatar_1793515596480.jpg'}" alt="${d.name}" class="doctor-avatar" />
+            <div style="flex: 1;">
+              <h3>${d.name}</h3>
+              <div style="color: var(--primary); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;">${d.specialization}</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">${d.bio ? d.bio.substring(0, 90) + '...' : ''}</p>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 700; color: var(--secondary);">$${d.consultation_fee} / visit</span>
+                <a href="login.html" class="btn btn-secondary btn-sm">Book</a>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Failed to load doctors:', err);
+      }
+    });
+  </script>
+</body>
+</html>
